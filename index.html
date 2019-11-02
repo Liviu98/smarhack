@@ -146,15 +146,23 @@
 			    <script>
 			      var map;
 			      var myLatLng = {lat: 44.4376973, lng: 26.0245962};
-			      var myLatLng1 = {lat: 44.4386973, lng: 26.0245962};
+			      var myLatLng1 = {lat: 44.4286973, lng: 26.0245962};
 
-			      function addMarker(location, map) {
+			      function addMarker(location, map, name) {
 					  	var marker = new google.maps.Marker({
 					      position: location,
-					      title: 'Home Center',
-					      map:map
+					      title: name,
+					      map:map,
+					      icon:'img/parking-pin.png'
+					  });
+
+					  	google.maps.event.addListener(marker,'click',function() {
+
+					  		alert(marker.title);
 					  });
 				  }
+
+				  
 
 			      function initMap() {
 			          map = new google.maps.Map(document.getElementById('map'), {
@@ -173,21 +181,16 @@
 			        });
 			        
 
-			       addMarker(myLatLng,map);
-			       addMarker(myLatLng1,map);
+			       addMarker(myLatLng,map,"strada elevului, parcare 21");
+			       addMarker(myLatLng1,map,"Strada Leaota, parcare 32");
 
-
-			       google.maps.event.addListener(marker, 'click', (function(marker) {
-						  return function(evt) {
-						    console.log('click');
-						    var elem = $(marker.url);
-						    console.log(elem);
-
-						    $('html, body').animate({
-						      scrollTop: elem.offset().top
-						    }, 1000);
-						  }
-				   }(marker)))
+			      google.maps.event.addListener(
+            marker, 
+            "click", 
+            function (e) {
+                alert('click');
+            }
+        );
 
 			      }
 			    </script>
