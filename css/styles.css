@@ -1031,3 +1031,14 @@ p.back-link {
   margin-bottom: 20px;
   font-size: 12px;
   text-transform: uppercase; }
+
+.sus-log {
+  padding-top: 18px;
+  float: right;
+  padding-left: 50px;
+  padding-right: 20px;
+}
+
+.sus-log a{
+  color: #fff;
+}
