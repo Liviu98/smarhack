@@ -49,22 +49,15 @@
     });
 
     $("#btnAdd").click(function() {
-        const dateStart = moment($("#start").val()).toISOString();;
-        const dateEnd = moment($("#end").val()).toISOString();;
-
-        console.log(dateStart);
-        console.log(dateEnd);
-
-        var data = {
+        callEndpoint(API_ROOT + "/parkingSlotsAvailabilities", "POST", {
             parkingSlotId: sessionStorage.getItem("ParkingSlotId"),
-            start: dateStart,
-            end: dateEnd,
-            hourlyPrice: $("#price").val(),
+            start: moment($("#start").val()).toISOString(),
+            end: moment($("#end").val()).toISOString(),
+            hourlyPrice: Number($("#price").val()),
             details: ""
-        };
-
-        callEndpoint(API_ROOT + "/parkingSlotsAvailabilities", "POST", data, function(data) {
+        }, function(data) {
             console.log(data);
+            $("#parkingSlotContent").load("editparkingslot.html");
         }, function(status) {
             $("#formResponse").text("Incorrect login");
         });

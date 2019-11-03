@@ -54,7 +54,7 @@
                     <td>${p.start}</td>
                     <td>${p.end}</td>
                     <td>${p.hourlyPrice}</td>
-                    <td><button type="button" class="btn btn-danger")">Delete</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="deleteParkingSlotAvailability('${p.id}')">Delete</button></td>
                 </tr>`));
         }, function() {});
     });
@@ -63,4 +63,13 @@
         $("#btnParkingSlotAvailabilitySlide").click();
         $("#addParkingSlotAvailabilityContent").load("addparkingslotavailability.html");
     });
+
+    function deleteParkingSlotAvailability(id) {
+        callEndpoint(API_ROOT + "/parkingSlotsAvailabilities/" + id, "DELETE", null, function(data) {
+            console.log(data);
+            $("#parkingSlotContent").load("editparkingslot.html");
+        }, function(status) {
+            $("#formResponse").text("Incorrect login");
+        });
+    }
 </script>
