@@ -29,7 +29,8 @@
 
 <script>
     $(document).ready(function() {
-        callEndpoint(API_ROOT + "/parkingSlots", "GET", null, function(data) {
+        var jwt = parseJwt(sessionStorage.getItem("Token"));
+        callEndpoint(API_ROOT + "/parkingSlotsByIdentifier/" + jwt.id, "GET", null, function(data) {
             console.log(data);
             data.forEach(p => $('#parkingSlotTable tr:last').after(
                 `<tr>
