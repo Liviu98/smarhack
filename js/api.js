@@ -8,6 +8,7 @@ function hideLoading() {
     $("#loader").hide();
 }
 
+//const API_ROOT = 'http://localhost:5000/api';
 const API_ROOT = 'https://runtimeterrorapi.azurewebsites.net/api';
 
 function callEndpoint(route, type, data, callbackSuccess, callbackError) {
@@ -27,7 +28,8 @@ function callEndpoint(route, type, data, callbackSuccess, callbackError) {
         },
         complete: function(xhr, textStatus) {
             console.log(xhr.status);
-            callbackError(xhr.status);
+            if (xhr.status > 299)
+                callbackError(xhr.status);
             hideLoading();
         }
     }).done(function(html) {
