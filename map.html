@@ -38,7 +38,7 @@
         });
     }
 
-    function addMarkerAuto(id, latt, longg, map, name) {
+    function addMarkerAuto(id, latt, longg, map, name, price) {
         var marker = new google.maps.Marker({
             position: {
                 lat: latt,
@@ -55,6 +55,16 @@
 
             alert(Id);
         });
+
+        var infowindow = new google.maps.InfoWindow();
+        marker.addListener('mouseover', function() {
+        infowindow.setContent('<h4 style="color:green">' + price + ' credit/hour</h4>');
+        infowindow.open(map, marker);
+        });
+        marker.addListener('mouseout', function() {
+        infowindow.close();
+        });
+        
     }
 
     function initMap() {
@@ -86,13 +96,13 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        callEndpoint(API_ROOT + "/parkingSlots", "GET", null, function(data) {
+        callEndpoint(API_ROOT + "/parkingSlotsWithPrice", "GET", null, function(data) {
             console.log(data);
 
             data.forEach(AddMarkMet);
 
             function AddMarkMet(item) {
-                addMarkerAuto(item.id, item.latitude, item.longitude, map, item.name);
+                addMarkerAuto(item.id, item.latitude, item.longitude, map, item.name, item.hourlyPrice);
             }
         }, null);
     });
