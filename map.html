@@ -20,29 +20,6 @@
 
 <script>
     var map;
-    var myLatLng = {
-        lat: 44.4376973,
-        lng: 26.0245962
-    };
-    var myLatLng1 = {
-        lat: 44.4286973,
-        lng: 26.0245962
-    };
-
-    function addMarker(location, map, name) {
-        var marker = new google.maps.Marker({
-            position: location,
-            title: name,
-            map: map,
-            icon: 'img/parking-pin.png'
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-
-            alert(marker.title);
-        });
-    }
-
     var nowID;
 
     function addMarkerAuto(id, latt, longg, map, name, price) {
@@ -63,18 +40,18 @@
             $("#btnMapSlide").click();
             nowID = Id;
             $("#bookingParkingSlot").load("bookingParkingSlot.html");
-            
+
         });
 
         var infowindow = new google.maps.InfoWindow();
         marker.addListener('mouseover', function() {
-        infowindow.setContent('<h4 style="color:green">' + price + ' credit/hour</h4>');
-        infowindow.open(map, marker);
+            infowindow.setContent('<h4 style="color:green">' + price + ' credit/hour</h4>');
+            infowindow.open(map, marker);
         });
         marker.addListener('mouseout', function() {
-        infowindow.close();
+            infowindow.close();
         });
-        
+
     }
 
     function initMap() {

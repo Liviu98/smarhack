@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">About this Parking Slot
+                <div class="panel-heading">Book parking slot
                     <span id="btnBookingParkingSlotSlide" class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
                 </div>
                 <div class="panel-body">
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <h5 id="totalPrice"></h5>
+                                <h5>Estimated total price: <span id="totalPrice">0</span></h5>
                             </div>
                             <div class="col-md-3">
                                 <a id="btnBook" href="#" class="btn btn-lg btn-primary" style="width: 100%;">Book Now</a>
@@ -60,8 +60,8 @@
     $(document).ready(function() {
         var id = sessionStorage.getItem("parkingSlots");
         callEndpoint(API_ROOT + "/parkingSlotsWithPrice", "GET", null, function(data) {
+            console.log(data);
             price = data.hourlyPrice;
-
             data.forEach(searchById);
 
             function searchById(item) {
@@ -88,31 +88,26 @@
         $("#end").datetimepicker();
     });
 
+    function getDifference() {
+        var start = moment($("#start").val());
+        var end = moment($("#end").val());
+        var duration = moment.duration(end.diff(start));
+        var hours = duration.asHours();
+
+        console.log(hours);
+
+        return hours.toFixed(2);
+    }
+
     var timeStart, timeEnd, hourStart, hourEnd;
     $("#start").on("change paste keyup", function() {
-        timeStart = $(this).val();
-        hourStart = timeStart[11] + timeStart[12];
-        if (timeStart != null && timeEnd != null) {
-
-            var intHourEnd = parseInt(hourEnd);
-            var intHourStart = parseInt(hourStart);
-            var result = (intHourEnd - intHourStart) * price;
-            $("#totalPrice").html(result.toString());
-            totalPrice = result;
-        }
+        totalPrice = getDifference();
+        $("#totalPrice").html(totalPrice);
     });
 
     $("#end").on("change paste keyup", function() {
-        timeEnd = $(this).val();
-        hourEnd = timeEnd[11] + timeEnd[12];
-        if (timeStart != null && timeEnd != null) {
-
-            var intHourEnd = parseInt(hourEnd);
-            var intHourStart = parseInt(hourStart);
-            var result = (intHourEnd - intHourStart) * price;
-            $("#totalPrice").html("Total Price: " + result.toString());
-            totalPrice = result;
-        }
+        totalPrice = getDifference();
+        $("#totalPrice").html(totalPrice);
     });
 
     $("#btnBook").click(function() {
