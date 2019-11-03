@@ -101,12 +101,12 @@
 
     var timeStart, timeEnd, hourStart, hourEnd;
     $("#start").on("change paste keyup", function() {
-        totalPrice = getDifference();
+        totalPrice = getDifference() * price;
         $("#totalPrice").html(totalPrice);
     });
 
     $("#end").on("change paste keyup", function() {
-        totalPrice = getDifference();
+        totalPrice = getDifference() * price;
         $("#totalPrice").html(totalPrice);
     });
 

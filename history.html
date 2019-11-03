@@ -171,6 +171,14 @@
     }
 
     function reportIssue(id) {
-
+        callEndpoint(API_ROOT + "/issue", "POST", {
+            "bookingId": id,
+            "details": "Canceled booking",
+        }, function(data) {
+            console.log(data);
+            loadPage("issues.html");
+        }, function(status) {
+            console.error(data);
+        });
     }
 </script>
