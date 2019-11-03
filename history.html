@@ -1,18 +1,16 @@
 <div class="content">
-    <div class="row">
+    <div id="historyConfirmedContent" class="row" style="display: none;">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Booking History
-                    <span id="btnHistorySlide" class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+                <div class="panel-heading">Confirmed
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
                 </div>
                 <div class="panel-body">
-                    <table id="historyTable" class="table table-hover">
+                    <table id="historyConfirmedTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Name</th>
                                 <th>Start</th>
                                 <th>End</th>
-                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -23,28 +21,115 @@
             </div>
         </div>
     </div>
-</div>
 
-<div id="historyContent"></div>
+    <div id="historyPendingContent" class="row" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Pending
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+                </div>
+                <div class="panel-body">
+                    <table id="historyPendingTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyFinishedContent" class="row" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Finished
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+                </div>
+                <div class="panel-body">
+                    <table id="historyFinishedTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Start</th>
+                                <th>End</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyCanceledContent" class="row" style="display: none;">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Canceled
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+                </div>
+                <div class="panel-body">
+                    <table id="historyCanceledTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Start</th>
+                                <th>End</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <script>
     $(document).ready(function() {
-        callEndpoint(API_ROOT + "/parkingSlots", "GET", null, function(data) {
+        var jwt = parseJwt(sessionStorage.getItem("Token"));
+        callEndpoint(API_ROOT + "/bookingsOrderedByStatus/" + jwt.id, "GET", null, function(data) {
             console.log(data);
-            data.forEach(p => $('#historyTable tr:last').after(
-                `<tr>
-                    <td>${p.name}</td>
-                    <td>${p.identificator}</td>
-                    <td>${p.active}</td>
-                    <td>${p.active}</td>
-                    <td><button type="button" class="btn btn-primary" onclick="loadDetails('${p.id}')">Details</button></td>
-                </tr>`));
+            if (data.confirmed.length > 0) {
+                $("#historyConfirmedContent").show();
+                data.confirmed.forEach(p => $('#historyConfirmedTable tr:last').after(
+                    `<tr>
+                        <td>${p.start}</td>
+                        <td>${p.end}</td>
+                        <td><button type="button" class="btn btn-primary">Details</button></td>
+                    </tr>`));
+            }
+            if (data.pending.length > 0) {
+                $("#historyPendingContent").show();
+                data.pending.forEach(p => $('#historyPendingTable tr:last').after(
+                    `<tr>
+                        <td>${p.start}</td>
+                        <td>${p.end}</td>
+                        <td><button type="button" class="btn btn-primary">Details</button></td>
+                    </tr>`));
+            }
+            if (data.finished.length) {
+                $("#historyFinishedContent").show();
+                data.finished.forEach(p => $('#historyFinishedTable tr:last').after(
+                    `<tr>
+                        <td>${p.start}</td>
+                        <td>${p.end}</td>
+                    </tr>`));
+            }
+            if (data.canceled.length) {
+                $("#historyCanceledContent").show();
+                data.canceled.forEach(p => $('#historyCanceledTable tr:last').after(
+                    `<tr>
+                        <td>${p.start}</td>
+                        <td>${p.end}</td>
+                    </tr>`));
+            }
         }, function() {});
     });
-
-    function loadDetails(id) {
-        sessionStorage.setItem("HistoryId", id);
-        $("#btnHistorySlide").click();
-        $("#historyContent").load("edithistory.html");
-    }
 </script>
