@@ -35,6 +35,27 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
+                <div class="panel-heading">Balance</div>
+                <div class="panel-body">
+                    <div class="col-md-6 text-center">
+                        <h2><span id="currentCredit">0</span><br><span class="fa fa-money"></span></h2>
+                    </div>
+                    <div class="col-md-6">
+                        <form role="form">
+                            <div class="form-group">
+                                <input id="addCredit" class="form-control" placeholder="+0" name="credit">
+                            </div>
+                            <a id="btnAddCredit" href="#" class="btn btn-primary">Add Credit</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
                 <div class="panel-heading">My Car</div>
                 <div class="panel-body">
                     <div class="col-md-6 text-center">
@@ -72,6 +93,7 @@
             $("#name").val(data.name);
             $("#phone").val(data.phoneNumber);
             $("#credit").val(data.credit);
+            $("#currentCredit").text(data.credit);
             callEndpoint(API_ROOT + "/cars/" + data.carId, "GET", null, function(data) {
                 console.log(data);
                 $("#licensePlate").val(data.licensePlate);
@@ -112,5 +134,9 @@
         }, function(status) {
             $("#formCarResponse").text("Incorrect login");
         });
+    });
+
+    $("#btnAddCredit").click(function() {
+        alert("TODO");
     });
 </script>
