@@ -75,11 +75,9 @@
             }
         }, function() {});
 
-        callEndpoint(API_ROOT + "/parkingSlotsAvailabilities" + id, "GET", null, function(data) {
+        callEndpoint(API_ROOT + "/availabilityToString/" + nowID, "GET", null, function(data) {
             console.log(data);
-            $("#parkingSlotStart").text(data.start);
-            $("#parkingSlotEnd").text(data.end);
-
+            $("#parkingSlotStart").text(data.message);
         }, function() {});
     });
 
