@@ -4,13 +4,49 @@
             <div class="panel panel-default">
                 <div class="panel-heading">My Profile</div>
                 <div class="panel-body">
-                    <div class="col-md-6">
-                        <img src="http://placehold.it/50/30a5ff/fff" width="300" alt="Car photo" class="img-circle">
+                    <div class="col-md-6 text-center">
+                        <img src="http://placehold.it/50/30a5ff/fff" width="250" alt="Car photo" class="img-circle">
                     </div>
                     <div class="col-md-6">
-                        <h4>Name</h4>
-                        <h4>Phone number</h4>
-                        <h4>Credit</h4>
+                        <form role="form">
+                            <div class="form-group">
+                                <p id="formUserResponse" class="text-danger"></p>
+                            </div>
+                            <div class="form-group">
+                                <input id="name" class="form-control" placeholder="Name" name="name" type="text">
+                            </div>
+                            <div class="form-group">
+                                <input id="phone" class="form-control" placeholder="Phone number" name="phone" type="text">
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input id="credit" class="form-control" placeholder="0" name="credit" type="text" readonly>
+                                    <span class="input-group-addon"><span class="fa fa-money"></span></span>
+                                </div>
+                            </div>
+                            <a id="btnSaveUser" href="#" class="btn btn-primary">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Balance</div>
+                <div class="panel-body">
+                    <div class="col-md-6 text-center">
+                        <h2><span id="currentCredit">0</span><br><span class="fa fa-money"></span></h2>
+                    </div>
+                    <div class="col-md-6">
+                        <form role="form">
+                            <div class="form-group">
+                                <input id="addCredit" class="form-control" placeholder="+0" name="credit">
+                            </div>
+                            <a id="btnAddCredit" href="#" class="btn btn-primary">Add Credit</a>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -22,17 +58,92 @@
             <div class="panel panel-default">
                 <div class="panel-heading">My Car</div>
                 <div class="panel-body">
-                    <div class="col-md-6">
-                        <img src="http://placehold.it/50/30a5ff/fff" width="300" alt="Car photo" class="img-circle">
+                    <div class="col-md-6 text-center">
+                        <img src="http://placehold.it/50/30a5ff/fff" width="250" alt="Car photo" class="img-circle">
                     </div>
                     <div class="col-md-6">
-                        <h4>License plate</h4>
-                        <h4>Model</h4>
-                        <h4>Color</h4>
-                        <h4>Photo</h4>
+                        <form role="form">
+                            <div class="form-group">
+                                <p id="formCarResponse" class="text-danger"></p>
+                            </div>
+                            <div class="form-group">
+                                <input id="licensePlate" class="form-control" placeholder="License plate" name="licensePlate">
+                            </div>
+                            <div class="form-group">
+                                <input id="model" class="form-control" placeholder="Model" name="model">
+                            </div>
+                            <div class="form-group">
+                                <input id="color" class="form-control" placeholder="Color" name="color" type="text">
+                            </div>
+                            <a id="btnSaveCar" href="#" class="btn btn-primary">Save</a>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var carId = "";
+    var jwt = parseJwt(sessionStorage.getItem("Token"));
+    $(document).ready(function() {
+        callEndpoint(API_ROOT + "/users/" + jwt.id, "GET", null, function(data) {
+            console.log(data);
+            $("#name").val(data.name);
+            $("#phone").val(data.phoneNumber);
+            $("#credit").val(data.credit);
+            $("#currentCredit").text(data.credit);
+            callEndpoint(API_ROOT + "/cars/" + data.carId, "GET", null, function(data) {
+                console.log(data);
+                $("#licensePlate").val(data.licensePlate);
+                $("#model").val(data.model);
+                $("#color").val(data.color);
+                carId = data.id;
+            }, function(status) {
+                console.log(status);
+            });
+        }, function(status) {
+            console.log(status);
+        });
+    });
+
+    $("#btnSaveUser").click(function() {
+        callEndpoint(API_ROOT + "/users/" + jwt.id, "PUT", {
+            name: $("#name").val(),
+            phoneNumber: $("#phone").val(),
+            credit: Number($("#credit").val()),
+            carId: carId
+        }, function(data) {
+            console.log(data);
+            loadPage('profile.html');
+        }, function(status) {
+            $("#formUserResponse").text("Incorrect login");
+        });
+    });
+
+    $("#btnSaveCar").click(function() {
+        callEndpoint(API_ROOT + "/cars/" + carId, "PUT", {
+            model: $("#model").val(),
+            licensePlate: $("#licensePlate").val(),
+            color: $("#color").val(),
+            photoPath: ""
+        }, function(data) {
+            console.log(data);
+            loadPage('profile.html');
+        }, function(status) {
+            $("#formCarResponse").text("Incorrect login");
+        });
+    });
+
+    $("#btnAddCredit").click(function() {
+        callEndpoint(API_ROOT + "/users/addCredit/" + jwt.id, "POST", {
+            credit: Number($("#addCredit").val())
+        }, function(data) {
+            console.log(data);
+            loadPage('profile.html');
+        }, function(status) {
+            $("#formCarResponse").text("Incorrect login");
+        });
+    });
+</script>
