@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Park</title>
+    <title>DynamicParking</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/datepicker3.css" rel="stylesheet">
@@ -33,36 +33,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span></button>
-                <a class="navbar-brand" href="#"><span>My</span>Park</a>
+                <a class="navbar-brand" href="#"><span>Dynamic</span>Parking</a>
             </div>
         </div>
         <!-- /.container-fluid -->
     </nav>
 
-    <div id="logedContent" style="display:none;">  
+    <div id="logedContent" style="display:none;">
 
-    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-        <div class="profile-sidebar">
-            <div class="profile-userpic">
-                <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+        <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+            <div class="profile-sidebar">
+                <div class="profile-userpic">
+                    <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+                </div>
+                <div class="profile-usertitle">
+                    <div id="profileUsername" class="profile-usertitle-name"></div>
+                    <div class="profile-usertitle-status"><span class="fa fa-money"></span><span id="profileCredit">Online</span></div>
+                </div>
+                <div class="clear"></div>
             </div>
-            <div class="profile-usertitle">
-                <div id="profileUsername" class="profile-usertitle-name"></div>
-                <div class="profile-usertitle-status"><span class="fa fa-money"></span><span id="profileCredit">Online</span></div>
-            </div>
-            <div class="clear"></div>
+            <div class="divider"></div>
+            <ul class="nav menu">
+                <li><a href="#" onclick="loadPage('profile.html');"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
+                <li><a href="#" onclick="loadPage('parkingslots.html');"><em class="fa fa-table">&nbsp;</em> Parking Slots</a></li>
+                <li><a href="#" onclick="loadPage('map.html');"><em class="fa fa-map-pin">&nbsp;</em> Find a parking slot</a></li>
+                <li><a href="#" onclick="loadPage('history.html');"><em class="fa fa-calendar">&nbsp;</em> History</a></li>
+                <li><a href="#" onclick="loadPage('issues.html');"><em class="fa fa-exclamation-triangle">&nbsp;</em> Issues</a></li>
+                <li><a href="#" onclick="logOut()"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+            </ul>
         </div>
-        <div class="divider"></div>
-        <ul class="nav menu">
-            <li><a href="#" onclick="loadPage('profile.html');"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
-            <li><a href="#" onclick="loadPage('parkingslots.html');"><em class="fa fa-table">&nbsp;</em> Parking Slots</a></li>
-            <li><a href="#" onclick="loadPage('map.html');"><em class="fa fa-map-pin">&nbsp;</em> Find a parking slot</a></li>
-            <li><a href="#" onclick="loadPage('history.html');"><em class="fa fa-calendar">&nbsp;</em> History</a></li>
-            <li><a href="#" onclick="loadPage('issues.html');"><em class="fa fa-exclamation-triangle">&nbsp;</em> Issues</a></li>
-            <li><a href="#" onclick="logOut()"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
-        </ul>
-    </div>
-    <!--/.sidebar-->
+        <!--/.sidebar-->
     </div>
 
     <div id="ajax-content" class="col-sm-10 col-lg-offset-2  main"></div>
@@ -77,12 +77,12 @@
         <div class="row" style="overflow:hidden;">
             <div class="col-md-5"></div>
             <div class="col-md-2">
-                    <a id="btnBook" href="#" onclick="logOut()" class="btn btn-lg btn-primary" style="width: 100%;margin-top:20px;">Log in</a>
-                    <p style="padding-top:5px;margin-bottom:0px;">or</p>
-                    <a href="/register.html">Register</a>      
-                </div>
-            <div class="col-md-5"></div>
+                <a id="btnBook" href="#" onclick="logOut()" class="btn btn-lg btn-primary" style="width: 100%;margin-top:20px;">Log in</a>
+                <p style="padding-top:5px;margin-bottom:0px;">or</p>
+                <a href="/register.html">Register</a>
             </div>
+            <div class="col-md-5"></div>
+        </div>
     </div>
 
     <script src="js/jquery-1.11.1.min.js"></script>
@@ -99,18 +99,14 @@
     <script src="js/api.js"></script>
 
     <script>
-
-       
         var loged;
         $(document).ready(function() {
-            
+
             loged = sessionStorage.getItem("Token");
 
-            if(loged === null)
-            {
+            if (loged === null) {
                 $("#logedContent").hide();
-            }
-            else {
+            } else {
                 loadPage("map.html");
                 $("#intro").hide();
                 $("#logedContent").show();
@@ -125,18 +121,17 @@
                 console.log(status);
             });
 
-            
-           
-            
 
-            
+
+
+
+
         });
 
         function logOut() {
             sessionStorage.removeItem("Token");
             window.location = "login.html";
         }
-      
     </script>
 
 </body>
