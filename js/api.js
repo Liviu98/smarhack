@@ -27,7 +27,8 @@ function callEndpoint(route, type, data, callbackSuccess, callbackError) {
         },
         complete: function(xhr, textStatus) {
             console.log(xhr.status);
-            callbackError(xhr.status);
+            if (xhr.status > 299)
+                callbackError(xhr.status);
             hideLoading();
         }
     }).done(function(html) {
