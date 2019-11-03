@@ -137,6 +137,13 @@
     });
 
     $("#btnAddCredit").click(function() {
-        alert("TODO");
+        callEndpoint(API_ROOT + "/users/addCredit/" + jwt.id, "POST", {
+            credit: Number($("#addCredit").val())
+        }, function(data) {
+            console.log(data);
+            loadPage('profile.html');
+        }, function(status) {
+            $("#formCarResponse").text("Incorrect login");
+        });
     });
 </script>
