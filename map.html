@@ -51,7 +51,6 @@
         marker.addListener('mouseout', function() {
             infowindow.close();
         });
-
     }
 
     function initMap() {
@@ -68,22 +67,10 @@
                 }]
             }]
         });
-
-        google.maps.event.addListener(
-            marker,
-            "click",
-            function(e) {
-                alert('click');
-            }
-        );
     }
-</script>
 
-<script src="js/api.js"></script>
-
-<script type="text/javascript">
     $(document).ready(function() {
-        callEndpoint(API_ROOT + "/parkingSlotsWithPrice", "GET", null, function(data) {
+        setTimeout(callEndpoint(API_ROOT + "/parkingSlotsWithPrice", "GET", null, function(data) {
             console.log(data);
 
             data.forEach(AddMarkMet);
@@ -91,10 +78,6 @@
             function AddMarkMet(item) {
                 addMarkerAuto(item.id, item.latitude, item.longitude, map, item.name, item.hourlyPrice);
             }
-        }, null);
+        }, null), 1000);
     });
 </script>
-
-</body>
-
-</html>
