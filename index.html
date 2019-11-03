@@ -38,6 +38,9 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
+
+    <div id="logedContent" style="display:none;">  
+
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
         <div class="profile-sidebar">
             <div class="profile-userpic">
@@ -60,8 +63,27 @@
         </ul>
     </div>
     <!--/.sidebar-->
+    </div>
 
     <div id="ajax-content" class="col-sm-10 col-lg-offset-2  main"></div>
+
+    <div id="intro" style="text-align: center;padding-top:70px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="img/icon-intro.jpg" alt="">
+                <h2>Do you need a parking slot?</h2>
+            </div>
+        </div>
+        <div class="row" style="overflow:hidden;">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                    <a id="btnBook" href="#" onclick="logOut()" class="btn btn-lg btn-primary" style="width: 100%;margin-top:20px;">Log in</a>
+                    <p style="padding-top:5px;margin-bottom:0px;">or</p>
+                    <a href="/register.html">Register</a>      
+                </div>
+            <div class="col-md-5"></div>
+            </div>
+    </div>
 
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -77,7 +99,23 @@
     <script src="js/api.js"></script>
 
     <script>
+
+       
+        var loged;
         $(document).ready(function() {
+            
+            loged = sessionStorage.getItem("Token");
+
+            if(loged === null)
+            {
+                $("#logedContent").hide();
+            }
+            else {
+                loadPage("map.html");
+                $("#intro").hide();
+                $("#logedContent").show();
+            }
+
             var jwt = parseJwt(sessionStorage.getItem("Token"));
             callEndpoint(API_ROOT + "/users/" + jwt.id, "GET", null, function(data) {
                 console.log(data);
@@ -86,12 +124,19 @@
             }, function(status) {
                 console.log(status);
             });
+
+            
+           
+            
+
+            
         });
 
         function logOut() {
             sessionStorage.removeItem("Token");
             window.location = "login.html";
         }
+      
     </script>
 
 </body>
