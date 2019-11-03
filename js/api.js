@@ -56,3 +56,8 @@ function parseJwt(token) {
 
     return JSON.parse(jsonPayload);
 };
+
+function formatDate(date) {
+    var dateTime = new Date(date);
+    return moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
+}

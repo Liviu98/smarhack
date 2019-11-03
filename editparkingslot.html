@@ -51,8 +51,8 @@
             console.log(data);
             data.forEach(p => $('#parkingSlotAvailabilityTable tr:last').after(
                 `<tr>
-                    <td>${p.start}</td>
-                    <td>${p.end}</td>
+                    <td>${formatDate(p.start)}</td>
+                    <td>${formatDate(p.end)}</td>
                     <td>${p.hourlyPrice}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteParkingSlotAvailability('${p.id}')">Delete</button></td>
                 </tr>`));

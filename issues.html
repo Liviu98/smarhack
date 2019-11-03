@@ -28,7 +28,7 @@
             data.forEach(p => $('#issuesTable tr:last').after(
                 `<tr>
                     <td>${p.bookingId}</td>
-                    <td>${p.dateTime}</td>
+                    <td>${formatDate(p.dateTime)}</td>
                     <td>${p.details}</td>
                 </tr>`));
         }, function() {});

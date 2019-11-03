@@ -100,8 +100,8 @@
                 $("#historyConfirmedContent").show();
                 data.confirmed.forEach(p => $('#historyConfirmedTable tr:last').after(
                     `<tr>
-                        <td>${p.start}</td>
-                        <td>${p.end}</td>
+                        <td>${formatDate(p.start)}</td>
+                        <td>${formatDate(p.end)}</td>
                         <td><button type="button" class="btn btn-primary" onclick="endBooking('${p.id}')">End Booking</button></td>
                     </tr>`));
             }
@@ -109,8 +109,8 @@
                 $("#historyPendingContent").show();
                 data.pending.forEach(p => $('#historyPendingTable tr:last').after(
                     `<tr>
-                        <td>${p.start}</td>
-                        <td>${p.end}</td>
+                        <td>${formatDate(p.start)}</td>
+                        <td>${formatDate(p.end)}</td>
                         <td><button type="button" class="btn btn-primary" onclick="startBooking('${p.id}')">Start Booking</button></td>
                         <td><button type="button" class="btn btn-danger" onclick="cancelBooking('${p.id}')">Cancel Booking</button></td>
                         <td><button type="button" class="btn btn-warning" onclick="reportIssue('${p.id}')">Report issue</button></td>
@@ -120,16 +120,16 @@
                 $("#historyFinishedContent").show();
                 data.finished.forEach(p => $('#historyFinishedTable tr:last').after(
                     `<tr>
-                        <td>${p.start}</td>
-                        <td>${p.end}</td>
+                        <td>${formatDate(p.start)}</td>
+                        <td>${formatDate(p.end)}</td>
                     </tr>`));
             }
             if (data.canceled.length) {
                 $("#historyCanceledContent").show();
                 data.canceled.forEach(p => $('#historyCanceledTable tr:last').after(
                     `<tr>
-                        <td>${p.start}</td>
-                        <td>${p.end}</td>
+                        <td>${formatDate(p.start)}</td>
+                        <td>${formatDate(p.end)}</td>
                     </tr>`));
             }
         }, function() {});
