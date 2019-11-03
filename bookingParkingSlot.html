@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">About this Parking Slot
-                    <span id="btnParkingSlotAvailabilitySlide" class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+                    <span id="btnBookingParkingSlotSlide" class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -16,58 +16,56 @@
                             <h5 id="parkingSlotEnd"></h5>
                         </div>
                     </div>
+                    <div class="row">
+                        <form role="form">
+                            <div class="form-group">
+                                <p id="formResponse" class="text-danger"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input id="start" class="form-control" type="text" readonly>
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input id="end" class="form-control" type="text" readonly>
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <h5 id="totalPrice"></h5>
+                            </div>
+                            <div class="col-md-3">
+                                <a id="btnBook" href="#" class="btn btn-lg btn-primary" style="width: 100%;">Book Now</a>
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="addParkingSlotAvailabilityContent"></div>
-
-<form role="form">
-    <div class="form-group">
-        <p id="formResponse" class="text-danger"></p>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <div class="input-group">
-                <input id="start" class="form-control" type="text" readonly>
-                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <div class="input-group">
-                <input id="end" class="form-control" type="text" readonly>
-                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <h5 id="totalPrice"></h5>
-    </div>
-    <div class="col-md-3">
-        <a id="btnBook" href="#" class="btn btn-lg btn-primary" style="width: 100%;">Book Now</a>
-    </div>
-</form>
+<div id="bookingConfirmationContent"></div>
 
 <script>
-
     var price, totalPrice;
 
     $(document).ready(function() {
         var id = sessionStorage.getItem("parkingSlots");
         callEndpoint(API_ROOT + "/parkingSlotsWithPrice", "GET", null, function(data) {
-            console
-           
             price = data.hourlyPrice;
-
 
             data.forEach(searchById);
 
             function searchById(item) {
-                if(item.id == nowID) {
+                if (item.id == nowID) {
                     $("#parkingSlotName").text("Location: " + item.name);
                     $("#parkingSlotIdentificator").text(item.identificator);
                     $("#parkingSlotHourlyPrice").text("Price/Hour: " + item.hourlyPrice);
@@ -92,44 +90,47 @@
 
     var timeStart, timeEnd, hourStart, hourEnd;
     $("#start").on("change paste keyup", function() {
-      timeStart = $(this).val();
-      hourStart = timeStart[11] + timeStart[12];
-     if(timeStart != null && timeEnd != null) {
-      
-         var intHourEnd = parseInt(hourEnd);
-        var intHourStart = parseInt(hourStart);
-        var result = (intHourEnd - intHourStart) * price;
-        $("#totalPrice").html(result.toString());
-        totalPrice = result;
-     }
+        timeStart = $(this).val();
+        hourStart = timeStart[11] + timeStart[12];
+        if (timeStart != null && timeEnd != null) {
+
+            var intHourEnd = parseInt(hourEnd);
+            var intHourStart = parseInt(hourStart);
+            var result = (intHourEnd - intHourStart) * price;
+            $("#totalPrice").html(result.toString());
+            totalPrice = result;
+        }
     });
 
     $("#end").on("change paste keyup", function() {
-     timeEnd = $(this).val();
-     hourEnd = timeEnd[11] + timeEnd[12];
-     if(timeStart != null && timeEnd != null) {
-        
-        var intHourEnd = parseInt(hourEnd);
-        var intHourStart = parseInt(hourStart);
-        var result = (intHourEnd - intHourStart) * price;
-        $("#totalPrice").html("Total Price: " + result.toString());
-        totalPrice = result;
-     }
-    });
+        timeEnd = $(this).val();
+        hourEnd = timeEnd[11] + timeEnd[12];
+        if (timeStart != null && timeEnd != null) {
 
+            var intHourEnd = parseInt(hourEnd);
+            var intHourStart = parseInt(hourStart);
+            var result = (intHourEnd - intHourStart) * price;
+            $("#totalPrice").html("Total Price: " + result.toString());
+            totalPrice = result;
+        }
+    });
 
     $("#btnBook").click(function() {
         var jwt = parseJwt(sessionStorage.getItem("Token"));
-        callEndpoint(API_ROOT + "/addBookings", "POST", {
+        var data = {
             start: moment($("#start").val()).toISOString(),
             end: moment($("#end").val()).toISOString(),
             parkingSlotId: nowID,
             totalPrice: totalPrice,
             clientId: jwt.id
-        }, function(data) {
+        }
+        console.log(data);
+        callEndpoint(API_ROOT + "/addBookings", "POST", data, function(data) {
             console.log(data);
-            //$("#parkingSlotContent").load("editparkingslot.html");
+            $("#btnBookingParkingSlotSlide").click();
+            $("#bookingConfirmationContent").load("bookingconfirmation.html");
         }, function(status) {
+            console.error(data);
             $("#formResponse").text("Incorrect login");
         });
     });
